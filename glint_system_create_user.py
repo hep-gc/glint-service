@@ -27,16 +27,18 @@ def remove_user():
 
 def show_usage():
     print "USAGE"
-    print "CREATE_USER: python system_create_user.py create-glint-user"
-    print "REMOVE_USER: python system_create_user.py remove-glint-user"
+    print "[id] is an OPTION default is 171"
+    print "CREATE_USER: python system_create_user.py create-glint-user [id]"
+    print "REMOVE_USER: python system_create_user.py remove-glint-user [id]"
 
-if len(sys.argv) == 2:
+if len(sys.argv) == 2 or len(sys.argv) == 3:
+    if len(sys.argv) == 3:
+        id = sys.argv[2]
     if sys.argv[1] == "create-glint-user":
         create_group()
         add_user()
     elif sys.argv[1] == "remove-glint-user":
         remove_user()
-        #remove_group()
     else:
         show_usage()
 else:
