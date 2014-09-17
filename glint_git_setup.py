@@ -5,6 +5,9 @@ horizon_git_repo='https://github.com/rd37/horizon'
 glint_git_repo='https://github.com/hep-gc/glint.git'
 
 import sys,subprocess
+
+from glint_arg_parser import GlintArgumentParser
+
 def proceed(msg):
     print msg
     input = raw_input()
@@ -66,6 +69,12 @@ def install_horizon():
 def install_glint():
     print "install glint"
 
+def uninstall_horizon():
+    print "uninstall glint-horizon"
+
+def uninstall_glint():
+    print "uninstall glint"
+
 ########### Uninstalling glint and and glint-horizon
 def remove_glint():
     print "Try Removing Glint Git Repository"
@@ -76,35 +85,42 @@ def remove_glint_horizon():
     [out,err] = execute_command(['rm','-rf','/var/lib/glint/horizon'])
     
 ########### Main Func
-def show_usage():
-    print "Usage"
-    print "INSTALL: python glint_git_setup.py install"
-    print "UNINSTALL (glint and glint-horizon): python glint_git_setup.py uninstall"
-    print "UNINSTALL (glint): python glint_git_setup.py uninstall glint"
-    print "UNINSTALL (glint-horizon): python glint_git_setup.py uninstall glint-horizon"
 
-if len(sys.argv) == 2 or len(sys.argv) == 3:
-    if sys.argv[1] == 'install':
-        if check_dependencies():
-            print "Git and User Glint are OK ... moving along"
+gap = GlintArgumentParser()
+gap.init_git_arg_parser()
+args = gap.parser.parse_args()
+print args
+
+if args.install is not None:
+    if args.glint_url is not None  and args.glint_hor_url is not None:
+        glint_git_repo = args.glint_url
+        horizon_git_repo = args.glint_hor_url
+        print "Overide default Git Repos with %s and %s"%(glint_git_repo,horizon_git_repo)
+    if check_dependencies():
+        print "Git and User Glint are OK ... moving along"
+        
+        if args.install == 'all':
             download_horizon()
             download_glint()
-            #install_horizon()
-            #install_glint()
-        else:
-            print "Check your Setup, system requirements are the git tool and user glint to exist"
-    elif sys.argv[1] == 'uninstall':
-        if len(sys.argv) == 3:
-            if sys.argv[2] == 'glint':
-                remove_glint() 
-            elif sys.argv[2] == 'glint-horizon':
-                remove_glint_horizon()
-            else:
-                show_usage()
-        else:
-            remove_glint()
-            remove_glint_horizon()  
+            install_horizon()
+            install_glint()
+        elif args.install == 'glint':
+            download_glint()
+            install_glint()
+        elif args.install == 'horizon':
+            download_horizon()
+            install_horizon()
     else:
-        show_usage()
-else:
-    show_usage()
+        print "Check your Setup, system requirements are the git tool and user glint to exist"
+elif args.uninstall is not None:
+    if args.uninstall == 'all':
+        uninstall_horizon()
+        uninstall_glint()
+        remove_glint()
+        remove_glint_horizon()
+    elif args.install == 'glint':
+        uninstall_glint()
+        remove_glint()
+    elif args.install == 'horizon':
+        uninstall_horizon()
+        remove_glint_horizon()

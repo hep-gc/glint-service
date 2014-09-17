@@ -15,8 +15,17 @@
 # limitations under the License.
 
 # THIS FILE IS MANAGED BY THE GLOBAL REQUIREMENTS REPO - DO NOT EDIT
-import os,re,sys
+import os,re,sys,yaml
 import subprocess
+
+env_dict={}
+
+def execute_command(cmd_args):
+    process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    out,err = process.communicate()
+    if err:
+        print "warning: %s"%err
+    return out,err
 
 #ensure environment variables are set
 def environment_check():
@@ -37,14 +46,14 @@ def setup_glint_service():
     print "Setting Up Glint ... Remove any Old DB Entries"
     remove_glint_service()
     print "Registering Glint into Openstack's Keystone services and endpoint database"
-    process = subprocess.Popen(['keystone','service-create','--name=glint','--type=image_mgt','--description="Image Distribution Service"'],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    out,err = process.communicate()
+    
+    out,err = execute_command(['keystone','service-create','--name=glint','--type=image_mgt','--description="Image Distribution Service"'])
     rexp_processor = re.compile('\|\s+id\s+\|\s+[a-z0-9]{32}\s+\|')
     rexp_res = rexp_processor.search(out)
     rexp_processor = re.compile('[a-z0-9]{32}')
     glint_service_id = rexp_processor.search(rexp_res.group()).group()
-    process = subprocess.Popen(['keystone','endpoint-create','--region=openstack','--service-id=%s'%glint_service_id,'--publicurl=http://rat01.heprc.uvic.ca:9494/image_dist/','--internalurl=http://127.0.0.1:9494/','--adminurl=http://rat01.heprc.uvic.ca:9494/admin'],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    out,err = process.communicate()
+    
+    out,err = execute_command(['keystone','endpoint-create','--region=openstack','--service-id=%s'%glint_service_id,'--publicurl=http://rat01.heprc.uvic.ca:9494/image_dist/','--internalurl=http://127.0.0.1:9494/','--adminurl=http://rat01.heprc.uvic.ca:9494/admin'])
     print "Success Registering Glint to Openstack's Keystone database"
     return
 
@@ -61,24 +70,51 @@ def remove_glint_service():
         #remove the glint_service_id using keystone using keystone service-delete id
         process = subprocess.Popen(['keystone','service-delete','%s'%glint_service_id],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         out,err = process.communicate()
-
         #locate the glint endpoint refenence using glint_service_id and delete using endpoint-delete id
         process = subprocess.Popen(['keystone','endpoint-list'],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         out,err = process.communicate()
         if glint_service_id in out:
-            #print "keystone ep list %s"%out
-            #regex_str = '\|\s+[a-z0-9]{32}\s+\|\s+\w+\s+\|\s+[a-zA-Z0-9/.:%()]+\s+\|\s+.+\s+\|\s+.+\s+\|\s+%s\s+\|'%glint_service_id
             regex_str = '\|\s+[a-z0-9]{32}\s+\|\s+\w+\s+\|\s+[a-zA-Z0-9:/._()-]+\s+\|\s+[a-zA-Z0-9:/._()-]+\s+\|\s+[a-zA-Z0-9:/._()-]+\s+\|\s+%s\s+\|'%glint_service_id
-            #print "regex str %s"%regex_str
             rexp_processor = re.compile(regex_str)
             glint_endpoint_id = rexp_processor.search(out).group()
-            #print "found endid %s"%glint_endpoint_id
             process = subprocess.Popen(['keystone','endpoint-delete','%s'%glint_endpoint_id],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
             out,err = process.communicate()
     else:
         print "Glint has not been registered yet, so let's register it."
     return
 env_ck = environment_check()
+
+if not env_ck:
+    cfg_f = yaml.load( open("glint_setup.conf",'r') )
+    auth_file=cfg_f['glint-installation-auth']
+    print "Environment variables are not set, try yaml conf file glint_setup.conf for an auth file %s"%auth_file
+    [out,err] = execute_command(['cat',auth_file])
+    for line in out.splitlines():
+        exp_cmd = line.split('=',1)
+        if len(exp_cmd) == 2:
+            if "OS_USERNAME" in exp_cmd[0]:
+                print "OS_USERNAME is %s"%exp_cmd[1] 
+                env_dict['OS_USERNAME']=exp_cmd[1].replace('"','')
+            elif "OS_TENANT_ID" in exp_cmd[0]:
+                print "OS_TENANT_ID is %s"%exp_cmd[1]
+                env_dict['OS_TENANT_ID']=exp_cmd[1]
+            elif "OS_TENANT_NAME" in exp_cmd[0]:
+                print "OS_TENANT_NAME is %s"%exp_cmd[1]
+                env_dict['OS_TENANT_NAME']=exp_cmd[1].replace('"','')
+            elif "OS_AUTH_URL" in exp_cmd[0]:
+                print "OS_AUTH_URL is %s"%exp_cmd[1]
+                env_dict['OS_AUTH_URL']=exp_cmd[1]
+    if os.getenv("OS_PASSWORD") == None:
+        print "Enter Openstack Admin Password "
+        pw = sys.stdin.readline()
+        env_dict['OS_PASSWORD']=pw.rstrip()
+    else:
+        print "Password Already Set "
+        env_dict['OS_PASSWORD']=os.getenv("OS_PASSWORD")
+    os.environ.update(env_dict)
+    [out,err] = execute_command(['env'])
+    print "env %s"%out
+    env_ck=True
 
 if env_ck:
     if len(sys.argv) == 2:
