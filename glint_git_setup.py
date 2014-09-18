@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
 glint_lib_directory='/var/lib/glint'
-horizon_git_repo='https://github.com/rd37/horizon'
+horizon_git_repo='https://github.com/rd37/horizon.git'
 glint_git_repo='https://github.com/hep-gc/glint.git'
+glint_inst_type='default'
+horizon_inst_type='default'
+glint_server='django'
+glint_horizon_server='django'
 
 import sys,subprocess
 
@@ -64,16 +68,73 @@ def download_glint():
 
 
 def install_horizon():
-    print "install glint-horizon"
+    print "Install glint-horizon"
+    print "IP:Install library pre-reqs"
+    if horizon_inst_type == 'default':
+        print "IP:Install Horizon using default (virtualenv in /var/lib/glint/horizon/.venv)"
+    elif horizon_inst_type == 'replace':
+        print "Currently Unsupported: Remove openstack-horizon and replace with glint-horizon"
+    elif horizon_inst_type == 'contextualize':
+        print "Currently Unsupported: Insert or Replace parts of the openstack-horizon installation"
+    else:
+        print "Unrecognized installation type for glint - %s - error exiting"%horizon_inst_type
+        return
+    print "IP:Open Port used for glint-horizon ... port 8080, restart networking"
+    
+    if glint_horizon_server == 'django':
+        print "IP:Register glint-horizon using django test server this is used by /usr/bin/glint-horizon to start app"
+        print "IP:Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
+        print "IP:Setup /etc/init.d/glint-horizon as a service"
+    elif glint_horizon_server == 'apache':
+        print "Currently Unsupprted: Register glint-horizon with local apache this is used by /user/bin/glint-horizon to start stop the apache app"
+        print "Currently Unsupported: Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
+        print "Currently Unsupported: Setup /etc/init.d/glint-horizon as a service"
 
 def install_glint():
-    print "install glint"
+    print "Install glint"
+    if glint_inst_type == 'default':
+        print "IP:Leave glint in /var/lib/glint/glint"
+    elif glint_inst_type == 'local':
+        print "Currently Unsupported: Install glint into sites-packages - use setup.py"
+    else:
+        print "Unrecognized installation type for glint - %s - error exiting"%glint_inst_type
+        return
+    print "IP:Open Glint Port 9494 and restart networking"
+    
+    if glint_server == 'django':
+        print "IP:Setup /usr/bin/glint as main start of glint server from installed (either /var/lib or site-packeges) using django test server"
+        print "IP:Setup /etc/init.d/glint as a service "
+    elif glint_server == 'paste':
+        print "Currently Unsupported: Setup /usr/bin/glint as main start of glint server from installed (either /var/lib or site-packeges) using django test server"
+        print "Currently Unsupported: Setup /etc/init.d/glint as a service "
 
 def uninstall_horizon():
-    print "uninstall glint-horizon"
+    print "Uninstall glint-horizon"
+    print "IP: Stop glint-horizon service and remove it"
+    print "IP: Remove /usr/bin/glint-horizon script"
+    if glint_horizon_server == 'django':
+         print "Nothing to Do for django server"
+    elif glint_horizon_server == 'apache':
+         print "Currently Unsupported:Remove glint-horizon from apache"
+    
+    print "IP:Close port used by glint-horizon"
+    
+    if horizon_inst_type == 'default':
+        print "IP: UNInstall Horizon using default (virtualenv in /var/lib/glint/horizon/.venv)"
+    elif horizon_inst_type == 'replace':
+        print "Currently Unsupported: Remove glint-horizon and replace with openstack-horizon"
+    elif horizon_inst_type == 'contextualize':
+        print "Currently Unsupported: Revert changes to parts of the openstack-horizon installation"
 
 def uninstall_glint():
     print "uninstall glint"
+    if glint_inst_type == 'default':
+        print "Default Unistall - nothing to do here"
+    elif glint_inst_type == 'local':
+        print "Currently Unsupported: remove glint from sites-packages - use setup.py"
+    print "IP: Stop Glint as a Service"
+    print "IP: Remove /usr/bin/glint "
+    print "IP: Shutdown Glint Port 9494 and restart networking"
 
 ########### Uninstalling glint and and glint-horizon
 def remove_glint():
@@ -92,35 +153,44 @@ args = gap.parser.parse_args()
 print args
 
 if args.install is not None:
-    if args.glint_url is not None  and args.glint_hor_url is not None:
+    if args.glint_url is not None:
         glint_git_repo = args.glint_url
+    if args.glint_hor_url is not None:
         horizon_git_repo = args.glint_hor_url
-        print "Overide default Git Repos with %s and %s"%(glint_git_repo,horizon_git_repo)
+    if args.glint_inst_type is not None:
+        glint_inst_type = args.glint_inst_type
+    if args.hor_inst_type is not None:
+        horizon_inst_type = args.hor_inst_type
+    if args.glint_server is not None:
+        glint_server = args.glint_server[0] 
+    if args.glint_horizon_server is not None:
+        glint_horizon_server = args.glint_horizon_server[0]
+    
     if check_dependencies():
         print "Git and User Glint are OK ... moving along"
         
-        if args.install == 'all':
+        if args.install[0] == 'all':
             download_horizon()
             download_glint()
             install_horizon()
             install_glint()
-        elif args.install == 'glint':
+        elif args.install[0] == 'glint':
             download_glint()
             install_glint()
-        elif args.install == 'horizon':
+        elif args.install[0] == 'horizon':
             download_horizon()
             install_horizon()
     else:
         print "Check your Setup, system requirements are the git tool and user glint to exist"
 elif args.uninstall is not None:
-    if args.uninstall == 'all':
+    if args.uninstall[0] == 'all':
         uninstall_horizon()
         uninstall_glint()
         remove_glint()
         remove_glint_horizon()
-    elif args.install == 'glint':
+    elif args.install[0] == 'glint':
         uninstall_glint()
         remove_glint()
-    elif args.install == 'horizon':
+    elif args.install[0] == 'horizon':
         uninstall_horizon()
         remove_glint_horizon()

@@ -2,11 +2,13 @@
 
 import yaml,sys,subprocess,os
 
-glint_url = ''
-horizon_url = ''
-gl_inst_type = ''
-hor_inst_type= ''
+glint_url = 'https://github.com/hep-gc/glint.git'
+horizon_url = 'https://github.com/rd37/horizon.git'
+gl_inst_type = 'default'
+hor_inst_type= 'default'
 gl_user_id=171
+glint_server='django'
+glint_horizon_server='django'
 
 def set_env_openstack_admin_pw():
     print "---------------------------"
@@ -29,31 +31,30 @@ def create_glint_user():
 
 def download_install_glint():
     print "download install glint"
-    [out,err] = execute_command(['python','glint_git_setup.py','install','%s'%glint_url,'%s'%horizon_url])
+    [out,err] = execute_command(['python','glint_git_setup.py','-install','all','-glint_url','%s'%glint_url,'-glint_hor_url','%s'%horizon_url,'-glint_inst_type','%s'%gl_inst_type,'-hor_inst_type','%s'%hor_inst_type,'-glint_server','%s'%glint_server,'-glint_horizon_server','%s'%glint_horizon_server])
+    print out
 
 def register_glint_in_openstack():
     print "register glint in openstack"
     set_env_openstack_admin_pw()
     [out,err] = execute_command(['python','glint_openstack_registration.py'])
-
-def setup_glint_as_a_service():
-    print "setup glint as a service"
+    print out
 
 def remove_glint_user():
     print "remove glint user"
     [out,err] = execute_command(['python','glint_system_create_user.py','remove-glint-user','%s'%gl_user_id])
+    print out
 
 def delete_installed_glint():
     print "delete installed glint"
-    [out,err] = execute_command(['python','glint_git_setup.py','uninstall'])
+    [out,err] = execute_command(['python','glint_git_setup.py','-uninstall','all','-glint_inst_type','%s'%gl_inst_type,'-hor_inst_type','%s'%hor_inst_type,'-glint_server','%s'%glint_server,'-glint_horizon_server','%s'%glint_horizon_server])
+    print out
 
 def deregister_glint_in_openstack():
     print "deregister glint in openstack"
     set_env_openstack_admin_pw()
     [out,err] = execute_command(['python','glint_openstack_registration.py','uninstall'])
 
-def remove_glint_as_a_service():
-    print "remove glint as a service"
 
 def show_usage():
     print "Usage"
@@ -80,10 +81,8 @@ if len(sys.argv) == 2:
         create_glint_user()
         download_install_glint()
         register_glint_in_openstack()
-        setup_glint_as_a_service()
     elif sys.argv[1] == 'uninstall':
         print "Full Removal of Glint and Glint Horizon"
-        remove_glint_as_a_service()
         deregister_glint_in_openstack()
         delete_installed_glint()
         remove_glint_user()
