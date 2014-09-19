@@ -17,9 +17,9 @@
 . /etc/rc.d/init.d/functions
 
 prog=python
-exec="/usr/bin/glint-horizon"
+exec="/usr/bin/glint"
 #config="/etc/glance/glint-horizon.conf"
-pidfile="/var/run/glint/glint-horizon.pid"
+pidfile="/var/run/glint/glint.pid"
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
@@ -38,16 +38,16 @@ start() {
 
 stop() {
     echo -n $"Stopping $prog: $pidfile"
-    #killproc -p $pidfile $prog
-    #retval=$?
-    root_pid=`cat $pidfile`
+    killproc -p $pidfile $prog
+    retval=$?
+    #root_pid=`cat $pidfile`
     #echo "root pid is $root_pid"
-    pids=`pstree -p $root_pid | grep -o "[[:digit:]]*"`
+    #pids=`pstree -p $root_pid | grep -o "[[:digit:]]*"`
     #echo $pids
-    kill $pids
-    #[ $retval -eq 0 ] && rm -f $lockfile
-    #return $retval
-    return 
+    #kill $pids
+    [ $retval -eq 0 ] && rm -f $lockfile
+    return $retval
+    #return 
 }
 
 restart() {

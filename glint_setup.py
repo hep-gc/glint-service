@@ -62,6 +62,19 @@ def show_usage():
     print "INSTALL: python glint_setup.py install"
     print "UNINSTALL: python glint_setup.py uninstall"
 
+def start_glint_service():
+    print "If all is setup right, this sould start both glint service and glint-horizon dashboard"
+    print "Start glint service"
+    [out,err] = execute_command(['service','openstack-glint','start'])
+    print "Start glint-horizon dashboard"
+    [out,err] = execute_command(['service','openstack-glint-horizon','start'])
+
+def stop_glint_service():
+    print "Stop glint Service"
+    [out,err] = execute_command(['service','openstack-glint','stop'])
+    print "Stop glint-horizon dashboard"
+    [out,err] = execute_command(['service','openstack-glint-horizon','stop'])
+
 #read in conf and set global variables
 cfg_f = yaml.load( open("glint_setup.conf",'r') )
 glint_url=cfg_f['glint-git-url']
@@ -82,8 +95,10 @@ if len(sys.argv) == 2:
         create_glint_user()
         download_install_glint()
         register_glint_in_openstack()
+        start_glint_service()
     elif sys.argv[1] == 'uninstall':
         print "Full Removal of Glint and Glint Horizon"
+        stop_glint_service()
         deregister_glint_in_openstack()
         delete_installed_glint()
         remove_glint_user()

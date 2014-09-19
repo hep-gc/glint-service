@@ -82,6 +82,8 @@ def install_horizon():
     if horizon_inst_type == 'default':
         print "Install Horizon using default (virtualenv in /var/lib/glint/horizon/.venv)"
         [out,err] = execute_command(['python','/var/lib/glint/horizon/tools/install_venv.py'],None)
+        [out,err] = execute_command(['chown','-R','glint','/var/lib/glint/horizon'],None)
+        [out,err] = execute_command(['chgrp','-R','glint','/var/lib/glint/horizon'],None)
     elif horizon_inst_type == 'replace':
         print "Currently Unsupported: Remove openstack-horizon and replace with glint-horizon"
     elif horizon_inst_type == 'contextualize':
@@ -95,7 +97,8 @@ def install_horizon():
         print "Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
         #copy glint-horizon from /var/lib/glint/horizon to /usr/bin/glint-horizon
         [out,err] = execute_command(['cp','glint-horizon','/usr/bin/.'],None)
-        print "IP:Setup /etc/init.d/glint-horizon as a service"
+        print "Setup /etc/init.d/glint-horizon as a service"
+        [out,err] = execute_command(['cp','openstack-glint-horizon','/etc/init.d/.'],None)
     elif glint_horizon_server == 'apache':
         print "Currently Unsupprted: Register glint-horizon with local apache this is used by /user/bin/glint-horizon to start stop the apache app"
         print "Currently Unsupported: Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
@@ -104,7 +107,9 @@ def install_horizon():
 def install_glint():
     print "Install glint"
     if glint_inst_type == 'default':
-        print "IP:Leave glint in /var/lib/glint/glint"
+        print "Leave glint in /var/lib/glint/glint, but change own and group to glint"
+        [out,err] = execute_command(['chown','-R','glint','/var/lib/glint/glint'],None)
+        [out,err] = execute_command(['chgrp','-R','glint','/var/lib/glint/glint'],None)
     elif glint_inst_type == 'local':
         print "Currently Unsupported: Install glint into sites-packages - use setup.py"
     else:
@@ -113,8 +118,10 @@ def install_glint():
     print "IP:Open Glint Port 9494 and restart networking"
     
     if glint_server == 'django':
-        print "IP:Setup /usr/bin/glint as main start of glint server from installed (either /var/lib or site-packeges) using django test server"
-        print "IP:Setup /etc/init.d/glint as a service "
+        print "Setup /usr/bin/glint as main start of glint server from installed (either /var/lib or site-packeges) using django test server"
+        [out,err] = execute_command(['cp','glint','/usr/bin/.'],None)
+        print "Setup /etc/init.d/glint as a service "
+        [out,err] = execute_command(['cp','openstack-glint','/etc/init.d/.'],None)
     elif glint_server == 'paste':
         print "Currently Unsupported: Setup /usr/bin/glint as main start of glint server from installed (either /var/lib or site-packeges) using django test server"
         print "Currently Unsupported: Setup /etc/init.d/glint as a service "
