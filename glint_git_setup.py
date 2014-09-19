@@ -19,25 +19,30 @@ def proceed(msg):
        return True
     return False
 
-def execute_command(cmd_args):
-    process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    out,err = process.communicate()
+def execute_command(cmd_args,input):
+    if input is None:
+        process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        out,err = process.communicate()
+    else:
+        print "Need to use use input"
+        process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
+        out,err = process.communicate(input=input)
     if err:
         print "warning: %s"%err
     return out,err
 
 def check_dependencies():
     print "dependency check: check if git and user glint exist"
-    [out,err] = execute_command(['which','git'])
+    [out,err] = execute_command(['which','git'],None)
     if "no git" in out:
         print "Error, unable to find git tool, please install and attempt glint install again"
         return False
-    [out,err] = execute_command(['grep','glint','/etc/passwd'])
+    [out,err] = execute_command(['grep','glint','/etc/passwd'],None)
     if out == '':
         print "Warning, unable to find system user glint"
         if proceed('Do you wish to setup glint as a User? [Y,n]'):
             print "Ok lets setup glint user "
-            [out,err] = execute_command(['python','glint_system_create_user.py','create-glint-user'])
+            [out,err] = execute_command(['python','glint_system_create_user.py','create-glint-user'],None)
             if err:
                 print "Unable to create glint user"
                 return False
@@ -50,7 +55,7 @@ def check_dependencies():
 
 def download_horizon():
     print "download horizon using git clone"
-    [out,err] = execute_command(['git','clone','%s'%horizon_git_repo,'%s/horizon'%glint_lib_directory])
+    [out,err] = execute_command(['git','clone','%s'%horizon_git_repo,'%s/horizon'%glint_lib_directory],None)
     if err:
         print "Unable to git clone glint-horizon "
         return False
@@ -59,7 +64,7 @@ def download_horizon():
 
 def download_glint():
     print "download glint using git clone"
-    [out,err] = execute_command(['git','clone','%s'%glint_git_repo,'%s/glint'%glint_lib_directory])
+    [out,err] = execute_command(['git','clone','%s'%glint_git_repo,'%s/glint'%glint_lib_directory],None)
     if err:
         print "Unable to git clone glint"
         return False
@@ -69,9 +74,14 @@ def download_glint():
 
 def install_horizon():
     print "Install glint-horizon"
-    print "IP:Install library pre-reqs"
+    print "Install library pre-reqs"
+    [out,err] = execute_command(['yum','install','libxml2-devel'],'y')
+    print out
+    [out,err] = execute_command(['yum','install','libxslt-devel'],'y')
+    print out
     if horizon_inst_type == 'default':
-        print "IP:Install Horizon using default (virtualenv in /var/lib/glint/horizon/.venv)"
+        print "Install Horizon using default (virtualenv in /var/lib/glint/horizon/.venv)"
+        [out,err] = execute_command(['python','/var/lib/glint/horizon/tools/install_venv.py'],None)
     elif horizon_inst_type == 'replace':
         print "Currently Unsupported: Remove openstack-horizon and replace with glint-horizon"
     elif horizon_inst_type == 'contextualize':
@@ -82,8 +92,9 @@ def install_horizon():
     print "IP:Open Port used for glint-horizon ... port 8080, restart networking"
     
     if glint_horizon_server == 'django':
-        print "IP:Register glint-horizon using django test server this is used by /usr/bin/glint-horizon to start app"
-        print "IP:Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
+        print "Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
+        #copy glint-horizon from /var/lib/glint/horizon to /usr/bin/glint-horizon
+        [out,err] = execute_command(['cp','glint-horizon','/usr/bin/.'],None)
         print "IP:Setup /etc/init.d/glint-horizon as a service"
     elif glint_horizon_server == 'apache':
         print "Currently Unsupprted: Register glint-horizon with local apache this is used by /user/bin/glint-horizon to start stop the apache app"
@@ -111,7 +122,8 @@ def install_glint():
 def uninstall_horizon():
     print "Uninstall glint-horizon"
     print "IP: Stop glint-horizon service and remove it"
-    print "IP: Remove /usr/bin/glint-horizon script"
+    print "Remove /usr/bin/glint-horizon script"
+    [out,err] = execute_command(['rm','/usr/bin/glint-horizon'],None)
     if glint_horizon_server == 'django':
          print "Nothing to Do for django server"
     elif glint_horizon_server == 'apache':
@@ -139,11 +151,11 @@ def uninstall_glint():
 ########### Uninstalling glint and and glint-horizon
 def remove_glint():
     print "Try Removing Glint Git Repository"
-    [out,err] = execute_command(['rm','-rf','/var/lib/glint/glint'])
+    [out,err] = execute_command(['rm','-rf','/var/lib/glint/glint'],None)
 
 def remove_glint_horizon():
     print "Try Removing Glint-Horizon Git Repository"
-    [out,err] = execute_command(['rm','-rf','/var/lib/glint/horizon'])
+    [out,err] = execute_command(['rm','-rf','/var/lib/glint/horizon'],None)
     
 ########### Main Func
 

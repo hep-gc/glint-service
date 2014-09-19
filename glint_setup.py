@@ -28,6 +28,7 @@ def execute_command(cmd_args):
 def create_glint_user():
     print "creating glint user"
     [out,err] = execute_command(['python','glint_system_create_user.py','create-glint-user','%s'%gl_user_id])
+    #print out
 
 def download_install_glint():
     print "download install glint"
@@ -38,7 +39,7 @@ def register_glint_in_openstack():
     print "register glint in openstack"
     set_env_openstack_admin_pw()
     [out,err] = execute_command(['python','glint_openstack_registration.py'])
-    print out
+    #print out
 
 def remove_glint_user():
     print "remove glint user"
@@ -54,7 +55,7 @@ def deregister_glint_in_openstack():
     print "deregister glint in openstack"
     set_env_openstack_admin_pw()
     [out,err] = execute_command(['python','glint_openstack_registration.py','uninstall'])
-
+    print out
 
 def show_usage():
     print "Usage"
