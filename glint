@@ -27,7 +27,7 @@ signal.signal(signal.SIGTERM,signal_term_handler)
 if __name__ == "__main__":
    # print sys.argv
     #if len(sys.argv) == 3:
-    execute_command(['/var/lib/glint/glint/python','/var/lib/glint/glint/manage.py','runserver','0.0.0.0:9494'],None)
+    execute_command(['/usr/bin/python','/var/lib/glint/glint/manage.py','runserver','0.0.0.0:9494'],None)
     #else:
     #    print "Usage Example: python glint_horizon.py 0.0.0.0 8080"
     #exec /var/lib/glint/horizon/tools/with_venv.sh /var/lib/glint/horizon/manage.py runserver 0.0.0.0:8080

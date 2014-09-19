@@ -128,7 +128,8 @@ def install_glint():
 
 def uninstall_horizon():
     print "Uninstall glint-horizon"
-    print "IP: Stop glint-horizon service and remove it"
+    print "Stop glint-horizon service and remove it"
+    [out,err] = execute_command(['rm','/etc/init.d/openstack-glint-horizon'],None)
     print "Remove /usr/bin/glint-horizon script"
     [out,err] = execute_command(['rm','/usr/bin/glint-horizon'],None)
     if glint_horizon_server == 'django':
@@ -151,8 +152,11 @@ def uninstall_glint():
         print "Default Unistall - nothing to do here"
     elif glint_inst_type == 'local':
         print "Currently Unsupported: remove glint from sites-packages - use setup.py"
-    print "IP: Stop Glint as a Service"
-    print "IP: Remove /usr/bin/glint "
+    
+    print "Remove /etc/init.d/openstack-glint "
+    [out,err] = execute_command(['rm','/etc/init.d/openstack-glint'],None)
+    print "Remove /usr/bin/glint script"
+    [out,err] = execute_command(['rm','/usr/bin/glint'],None)
     print "IP: Shutdown Glint Port 9494 and restart networking"
 
 ########### Uninstalling glint and and glint-horizon
