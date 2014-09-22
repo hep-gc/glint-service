@@ -53,7 +53,7 @@ def setup_glint_service():
     rexp_processor = re.compile('[a-z0-9]{32}')
     glint_service_id = rexp_processor.search(rexp_res.group()).group()
     
-    out,err = execute_command(['keystone','endpoint-create','--region=openstack','--service-id=%s'%glint_service_id,'--publicurl=http://rat01.heprc.uvic.ca:9494/image_dist/','--internalurl=http://127.0.0.1:9494/','--adminurl=http://rat01.heprc.uvic.ca:9494/admin'])
+    out,err = execute_command(['keystone','endpoint-create','--region=openstack','--service-id=%s'%glint_service_id,'--publicurl=http://mouse01.heprc.uvic.ca:9494/image_dist/','--internalurl=http://127.0.0.1:9494/','--adminurl=http://mouse01.heprc.uvic.ca:9494/admin'])
     print "Success Registering Glint to Openstack's Keystone database"
     return
 

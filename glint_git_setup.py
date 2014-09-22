@@ -79,6 +79,18 @@ def install_horizon():
     print out
     [out,err] = execute_command(['yum','install','libxslt-devel'],'y')
     print out
+    [out,err] = execute_command(['yum','install','gcc'],'y')
+    print out
+    [out,err] = execute_command(['yum','install','git-core'],'y')
+    print out
+    [out,err] = execute_command(['yum','install','python-virtualenv'],'y')
+    print out
+    [out,err] = execute_command(['yum','install','python-devel'],'y')
+    print out
+    [out,err] = execute_command(['yum','install','openssl-devel'],'y')
+    print out
+    [out,err] = execute_command(['yum','install','libffi-devel'],'y')
+    print out
     if horizon_inst_type == 'default':
         print "Install Horizon using default (virtualenv in /var/lib/glint/horizon/.venv)"
         [out,err] = execute_command(['python','/var/lib/glint/horizon/tools/install_venv.py'],None)
@@ -93,6 +105,9 @@ def install_horizon():
         return
     print "IP:Open Port used for glint-horizon ... port 8080, restart networking"
     
+    print "Touch /var/run/glint"
+    [out,err] = execute_command(['touch','/var/run/glint'],None)
+
     if glint_horizon_server == 'django':
         print "Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
         #copy glint-horizon from /var/lib/glint/horizon to /usr/bin/glint-horizon

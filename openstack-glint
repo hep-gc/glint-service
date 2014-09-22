@@ -29,7 +29,7 @@ start() {
     [ -x $exec ] || exit 5
     #[ -f $config ] || exit 6
     echo -n $"Starting $prog $exec "
-    daemon --user glint --pidfile $pidfile "$exec &>/dev/null & echo \$! > $pidfile"
+    daemon --user glint --pidfile $pidfile "$exec &>/var/log/glint-service/glint.log & echo \$! > $pidfile"
     retval=$?
     echo
     [ $retval -eq 0 ] && touch $lockfile
@@ -38,15 +38,20 @@ start() {
 
 stop() {
     echo -n $"Stopping $prog: $pidfile"
-    killproc -p $pidfile $prog
-    retval=$?
+    #killproc -p $pidfile $prog
+    #retval=$?
+    root_pid=`cat $pidfile`
+    #echo "root pid is $root_pid"
+    pids=`pstree -p $root_pid | grep -o "[[:digit:]]*"`
+    #echo $pids
+    kill $pids
     #root_pid=`cat $pidfile`
     #echo "root pid is $root_pid"
     #pids=`pstree -p $root_pid | grep -o "[[:digit:]]*"`
     #echo $pids
     #kill $pids
-    [ $retval -eq 0 ] && rm -f $lockfile
-    return $retval
+    #[ $retval -eq 0 ] && rm -f $lockfile
+    #return $retval
     #return 
 }
 
