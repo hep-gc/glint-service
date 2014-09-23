@@ -74,6 +74,9 @@ def stop_glint_service():
     [out,err] = execute_command(['service','openstack-glint','stop'])
     print "Stop glint-horizon dashboard"
     [out,err] = execute_command(['service','openstack-glint-horizon','stop'])
+    print "Remove /var/run/glint which have pids for service"
+    [out,err] = execute_command(['rm','-rf','/var/run/glint'])
+    print "Remove glint-service log files"
 
 #read in conf and set global variables
 cfg_f = yaml.load( open("glint_setup.conf",'r') )

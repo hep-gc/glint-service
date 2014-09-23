@@ -105,8 +105,10 @@ def install_horizon():
         return
     print "IP:Open Port used for glint-horizon ... port 8080, restart networking"
     
-    print "Touch /var/run/glint"
-    [out,err] = execute_command(['touch','/var/run/glint'],None)
+    print "mkdir /var/run/glint and change permissions"
+    [out,err] = execute_command(['mkdir','/var/run/glint'],None)
+    [out,err] = execute_command(['chown','glint','/var/run/glint'],None)
+    [out,err] = execute_command(['chgrp','glint','/var/run/glint'],None)
 
     if glint_horizon_server == 'django':
         print "Setup /usr/bin/glint-horizon as main system start application (reads cfg file for gl-hor location)"
@@ -131,7 +133,12 @@ def install_glint():
         print "Unrecognized installation type for glint - %s - error exiting"%glint_inst_type
         return
     print "IP:Open Glint Port 9494 and restart networking"
-    
+     
+    print "mkdir /var/run/glint and change permissions"
+    [out,err] = execute_command(['mkdir','/var/log/glint-service'],None)
+    [out,err] = execute_command(['chown','glint','/var/log/glint-service'],None)
+    [out,err] = execute_command(['chgrp','glint','/var/log/glint-service'],None)
+
     if glint_server == 'django':
         print "Setup /usr/bin/glint as main start of glint server from installed (either /var/lib or site-packeges) using django test server"
         [out,err] = execute_command(['cp','glint','/usr/bin/.'],None)
@@ -172,6 +179,9 @@ def uninstall_glint():
     [out,err] = execute_command(['rm','/etc/init.d/openstack-glint'],None)
     print "Remove /usr/bin/glint script"
     [out,err] = execute_command(['rm','/usr/bin/glint'],None)
+    print "Remove log directory"
+    [out,err] = execute_command(['rm','/var/log/glint-service'],None)
+
     print "IP: Shutdown Glint Port 9494 and restart networking"
 
 ########### Uninstalling glint and and glint-horizon
