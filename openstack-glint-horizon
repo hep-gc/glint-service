@@ -29,7 +29,7 @@ start() {
     [ -x $exec ] || exit 5
     #[ -f $config ] || exit 6
     echo -n $"Starting $prog $exec "
-    daemon --user glint --pidfile $pidfile "$exec &>/dev/null & echo \$! > $pidfile"
+    daemon --user glint --pidfile $pidfile "$exec &>/var/log/glint-service/glint-horizon.log & echo \$! > $pidfile"
     retval=$?
     echo
     [ $retval -eq 0 ] && touch $lockfile
