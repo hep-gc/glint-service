@@ -88,7 +88,7 @@ def remove_glint_service():
 env_ck = environment_check()
 
 if not env_ck:
-    cfg_f = yaml.load( open("glint_setup.conf",'r') )
+    cfg_f = yaml.load( open("glint_setup.yaml",'r') )
     auth_file=cfg_f['glint-installation-auth']
     print "Environment variables are not set, try yaml conf file glint_setup.conf for an auth file %s"%auth_file
     [out,err] = execute_command(['cat',auth_file])
@@ -118,6 +118,10 @@ if not env_ck:
     [out,err] = execute_command(['env'])
     print "env %s"%out
     env_ck=True
+
+cfg_f = yaml.load( open("glint_setup.yaml",'r') )
+glint_service_url=cfg_f['glint-service-url']
+glint_service_port=cfg_f['glint-service-port']
 
 if env_ck:
     if len(sys.argv) == 2:

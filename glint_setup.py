@@ -80,7 +80,7 @@ def stop_glint_service():
     [out,err] = execute_command(['rm','-rf','/var/log/glint-service'])
 
 #read in conf and set global variables
-cfg_f = yaml.load( open("glint_setup.conf",'r') )
+cfg_f = yaml.load( open("glint_setup.yaml",'r') )
 glint_url=cfg_f['glint-git-url']
 horizon_url=cfg_f['glint-horizon-git-url']
 gl_inst_type=cfg_f['glint-installation-type']
