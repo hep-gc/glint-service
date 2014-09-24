@@ -138,7 +138,11 @@ def install_glint():
     [out,err] = execute_command(['mkdir','/var/log/glint-service'],None)
     [out,err] = execute_command(['chown','glint','/var/log/glint-service'],None)
     [out,err] = execute_command(['chgrp','glint','/var/log/glint-service'],None)
-
+    
+    print "copy glint service yaml conf file"
+    [out,err] = execute_command(['cp','glint_services.yaml','/var/lib/glint/glint/.'],None)
+    [out,err] = execute_command(['chown','glint:glint','/var/lib/glint/glint/glint_services.yaml'],None)
+    
     if glint_server == 'django':
         print "Setup /usr/bin/glint as main start of glint server from installed (either /var/lib or site-packeges) using django test server"
         [out,err] = execute_command(['cp','glint','/usr/bin/.'],None)

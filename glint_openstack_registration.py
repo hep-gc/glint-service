@@ -20,6 +20,9 @@ import subprocess
 
 env_dict={}
 
+glint_service_url='http://rat01.heprc.uvic.ca'
+glint_service_port='9494'
+
 def execute_command(cmd_args):
     process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     out,err = process.communicate()
@@ -53,7 +56,7 @@ def setup_glint_service():
     rexp_processor = re.compile('[a-z0-9]{32}')
     glint_service_id = rexp_processor.search(rexp_res.group()).group()
     
-    out,err = execute_command(['keystone','endpoint-create','--region=openstack','--service-id=%s'%glint_service_id,'--publicurl=http://mouse01.heprc.uvic.ca:9494/image_dist/','--internalurl=http://127.0.0.1:9494/','--adminurl=http://mouse01.heprc.uvic.ca:9494/admin'])
+    out,err = execute_command(['keystone','endpoint-create','--region=openstack','--service-id=%s'%glint_service_id,'--publicurl=%s:%s/image_dist/'%(glint_service_url,glint_service_port),'--internalurl=http://127.0.0.1:%s/'%glint_service_port,'--adminurl=%s:%s/admin'%(glint_service_url,glint_service_port)])
     print "Success Registering Glint to Openstack's Keystone database"
     return
 
