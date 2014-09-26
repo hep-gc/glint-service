@@ -26,10 +26,17 @@ if args.install:
     [out,err] = execute_command(['openssl','req','-new','-x509','-days','365','-nodes','-out','/etc/stunnel/stunnel.pem','-keyout','/etc/stunnel/stunnel.pem'],'CA\nBC\nVIC\nUVIC\nHEPGC\nopenstack\nglint@glint.ca\n')
     [out,err] = execute_command(['/usr/bin/openssl','gendh','2048','>>','/etc/stunnel/stunnel.pem'],None)
     [out,err] = execute_command(['chmod','600','/etc/stunnel/stunnel.pem'],None)
-    [out,err] = execute_command(['stunnel','dev_https','&'],None)
+    [out,err] = execute_command(['mkdir','/var/run/stunnel'],None)
+    [out,err] = execute_command(['cp','openstack-glint-stunnel','/etc/init.d/.'],None)
+    [out,err] = execute_command(['cp','dev_https','/etc/stunnel/.'],None)
+    [out,err] = execute_command(['service','openstack-glint-stunnel','start'],None)
+    #[out,err] = execute_command(['stunnel','dev_https','&'],None)
     print "started stunnel with %s"%out
 elif args.uninstall:
     print "Uninstall stunnel"
+    [out,err] = execute_command(['service','openstack-glint-stunnel','stop'],None)
+    [out,err] = execute_command(['rm','-f','/etc/init.d/openstack-glint-stunnel'],None)
+    [out,err] = execute_command(['rm','-rf','/var/run/stunnel'],None)
     [out,err] = execute_command(['yum','remove','stunnel'],'y')
     [out,err] = execute_command(['rm','-rf','/etc/stunnel'],None)
     
