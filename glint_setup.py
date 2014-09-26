@@ -79,7 +79,7 @@ def stop_glint_service():
     [out,err] = execute_command(['rm','-rf','/var/run/glint'])
     print "Remove glint-service log files"
     [out,err] = execute_command(['rm','-rf','/var/log/glint-service'])
-     [out,err] = execute_command(['python','glint_stunnel_setup.py','--uninstall'])
+    [out,err] = execute_command(['python','glint_stunnel_setup.py','--uninstall'])
 
 #read in conf and set global variables
 cfg_f = yaml.load( open("glint_setup.yaml",'r') )
