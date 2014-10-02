@@ -29,6 +29,7 @@ once ports are opened and you have the rc file
 ... we can try an install
 
 Install and Setup
+
 1. Get a copy of the installation scripts (this is all you need)
 git clone https://github.com/rd37/glint-service.git
 
@@ -36,9 +37,14 @@ git clone https://github.com/rd37/glint-service.git
 cd glint-service
 sudo python glint_setup.py install
 
+
+
 (this takes about 10-15 minutes)
+
 * you will be prompted for your sudo password
+
 * you will be prompted for you openstack admin password ~5 mins into install:: (unless it was already setup in the environment, 
+
 i.e. you executed user@glint$  source openstack-admin.rc   #before sudo python glint_setup.py install
 
 
