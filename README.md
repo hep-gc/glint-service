@@ -31,11 +31,16 @@ once ports are opened and you have the rc file
 Install and Setup
 
 1. Get a copy of the installation scripts (this is all you need)
+
 git clone https://github.com/rd37/glint-service.git
 
+
 2. Start Download, Install and Setup
+
 cd glint-service
+
 sudo python glint_setup.py install
+
 
 
 
