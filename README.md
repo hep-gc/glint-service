@@ -30,12 +30,17 @@ once ports are opened and you have the rc file
 
 Install and Setup
 
-1. Get a copy of the installation scripts (this is all you need)
+1.Get a copy of the installation scripts (this is all you need)
 
 git clone https://github.com/rd37/glint-service.git
 
+2.Edit the Following conf files
 
-2. Start Download, Install and Setup
+  a.glint\_services.yaml - replace with your own base-urls for auth-url (keystone) glance\_url (glance) and give a unique name for your own glance repo -- I like rats;> - this conf file is for the glint service
+  
+  b.glint\_setup.yaml - 
+
+2.Start Download, Install and Setup
 
 cd glint-service
 
