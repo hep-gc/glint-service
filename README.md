@@ -37,7 +37,7 @@ git clone https://github.com/rd37/glint-service.git
 
    cd glint-service
 
-   i) glint\_services.yaml - replace with your own base-urls for auth-url (keystone) glance\_url (glance) and give a unique name for your own glance repo -- I like rats;> - this conf file is for the glint service
+   i) glint\_services.yaml - replace with your own base-urls for auth-url (keystone) glance\_url (glance) and give a unique name for your own (local) glance repo  -- I like rats;> - this conf file is for the glint service
   
    ii) glint\_setup.yaml 
       - replace glint-installation-auth with the file location of your openstack admin rc file (just leave it if you already sourced the admin rc file already)
