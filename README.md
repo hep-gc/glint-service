@@ -17,7 +17,7 @@ Pre-req
    
    c. select API Access tab
    
-   d. click Download openstack rc file (then copy to server your using for openstack and glint)
+   d. click Download openstack rc file (then copy to server your using to host glint)
 
 
 Make sure the file is accessible from the filesystem used to install glint, the glint setup script will read in the 
