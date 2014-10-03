@@ -1,6 +1,6 @@
 glint-service (Currently for Openstack Havana)
 =============
-
+The glint-service comprises of glint(uses glance to copy images around) and glint-horizon(altered the images tab to include image managment for remote repositories)
 Pre-req 
 
 1. ensure you have sudo/root on your installation machine
@@ -17,7 +17,7 @@ Pre-req
    
    c. select API Access tab
    
-   d. click Download openstack rc file
+   d. click Download openstack rc file (then copy to service your using for openstack and glint)
 
 
 Make sure the file is accessible from the filesystem used to install glint, the glint setup script will read in the 
