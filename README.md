@@ -23,9 +23,6 @@ Pre-req
 Make sure the file is accessible from the filesystem used to install glint, the glint setup script will read in the 
 file and set the environment variables ... you will be prompted for the admin password during the setup of glint at some point
 
-once ports are opened and you have the rc file 
-(or have the proper environment variable set with openstack credentials) 
-
 ... we can try an install
 
 Install and Setup
