@@ -35,6 +35,7 @@ Install and Setup
 git clone https://github.com/rd37/glint-service.git
 
 
+
 2. Edit the Following conf files
 
    a. cd glint-service
@@ -44,6 +45,7 @@ git clone https://github.com/rd37/glint-service.git
    c. glint\_setup.yaml 
       - replace glint-installation-auth with the file location of your openstack admin rc file (just leave it if you already sourced the admin rc file already)
       - replace glint-service-url with the url of your host machine (the machine you are running these scripts on)
+
 
 3. Start Download, Install and Setup
 
