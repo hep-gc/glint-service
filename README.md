@@ -58,9 +58,7 @@ sudo python glint_setup.py install
 
 * you will be prompted for your sudo password
 
-* you will be prompted for you openstack admin password ~5 mins into install:: (unless it was already setup in the environment, 
-
-i.e. you executed user@glint$  source openstack-admin.rc   #before sudo python glint_setup.py install
+* you will be prompted for you openstack admin password ~5 mins into install:: (unless it was already setup in the environment: i.e. you executed user@glint$  source openstack-admin.rc   #before sudo python glint_setup.py install)
 
 
 
