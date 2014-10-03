@@ -38,7 +38,7 @@ git clone https://github.com/rd37/glint-service.git
 
 2.Edit the Following conf files
 
-   a. cd glint-service
+   cd glint-service
 
    b. glint\_services.yaml - replace with your own base-urls for auth-url (keystone) glance\_url (glance) and give a unique name for your own glance repo -- I like rats;> - this conf file is for the glint service
   
