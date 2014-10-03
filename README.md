@@ -11,7 +11,7 @@ Pre-req
 
 (3. is only necessary if you don't setup the environment variables before installation i.e. if you did not source the admin.rc file for the openstack installation you are registering glint for )
 
-3. Since glint is registered with openstack as a service, you will need openstack administrative access. 
+3. Since glint is registered with openstack as a service, you will need openstack administrative access. This is because the installation uses keystone to add the glint service and register it's endpoint url. This makes glint searchable to other services looking for it. In this case glint-horizon will be searching for it!
 
    a. login to the openstack horizon interface as admin
    
