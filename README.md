@@ -1,6 +1,7 @@
 glint-service (Currently for Openstack Havana)
 =============
-The glint-service comprises of glint(uses glance to copy images around) and glint-horizon(altered the images tab to include image managment for remote repositories)
+The glint-service comprises of glint(uses glance to copy images around) and glint-horizon(which is horizon, but altered the images tab to include image managment for remote repositories)
+
 Pre-req 
 
 1. ensure you have sudo/root on your installation machine
