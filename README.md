@@ -6,7 +6,7 @@ Pre-req
 1. ensure you have sudo/root on your installation machine
 
 2. check that ports 8080 8483 9494 are open on your test machine 
-(glint uses 9494, horizon-glint uses 8080, and to secure horizon glint (even for testing) we use stunnel on 9494)
+(glint uses 9494, horizon-glint uses 8080, and to secure horizon glint (even for testing) we use stunnel on 8483)
 
 
 3. Since glint is registered with openstack as a service, you will need openstack administrative access. 
