@@ -29,7 +29,7 @@ Install and Setup
 
 1.Get a copy of the installation scripts (this is all you need)
 
-git clone https://github.com/rd37/glint-service.git
+git clone https://github.com/hep-gc/glint-service.git
 
 
 
