@@ -24,7 +24,7 @@ setup(
         #'hello': ['*.msg'],
     },
     data_files=df,
-    version = "2013.2.4.1.dev",
+    version = "2013.2.4.2.dev",
     author = "Ron Desmarais",
     author_email = "rd@uvic.ca",
     url = "https://github.com/hep-gc/glint-service",
