@@ -1,0 +1,9 @@
+pid=
+foreground=yes
+debug=7
+
+[https]
+accept=8483
+connect=8080
+TIMEOUTclose=1
+

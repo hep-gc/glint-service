@@ -1,0 +1,35 @@
+#!/usr/bin/python
+# PBR Generated from u'console_scripts'
+
+import sys,subprocess,signal,sys
+#process
+def execute_command(cmd_args,input):
+    if input is None:
+        global process
+        process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd='/var/lib/glint/glint')
+        #proc=process
+        out,err = process.communicate()
+    else:
+        print "Need to use use input"
+        process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
+        out,err = process.communicate(input=input)
+    if err:
+        print "warning: %s"%err
+    return process,out,err
+
+def signal_term_handler(signal,frame):
+    print "bye bye"
+    #process.terminate()
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM,signal_term_handler)
+
+if __name__ == "__main__":
+   # print sys.argv
+    #if len(sys.argv) == 3:
+    execute_command(['/usr/bin/python','manage.py','runserver','0.0.0.0:9494'],None)
+    #else:
+    #    print "Usage Example: python glint_horizon.py 0.0.0.0 8080"
+    #exec /var/lib/glint/horizon/tools/with_venv.sh /var/lib/glint/horizon/manage.py runserver 0.0.0.0:8080
+
+

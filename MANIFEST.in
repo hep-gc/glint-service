@@ -1,0 +1,4 @@
+include *.conf COPYING LICENSE README.*
+recursive-include glint-service *.yaml dev_https glint glint-horizon openstack-glint openstack-glint-horizon openstack-glint-stunnel
+
+

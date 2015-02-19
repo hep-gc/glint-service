@@ -1,0 +1,3 @@
+auth_url: http://rat01.heprc.uvic.ca:5000/v2.0
+glance_url: http://rat01.heprc.uvic.ca:5000/v2.0
+root_site: Rat01
