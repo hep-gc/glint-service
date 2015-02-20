@@ -51,13 +51,13 @@ done ...
 
 Git Installation and Setup Method
 
-1.Get a copy of the installation scripts (this is all you need)
+ 1. Get a copy of the installation scripts (this is all you need)
 
-git clone https://github.com/hep-gc/glint-service.git
+ git clone https://github.com/hep-gc/glint-service.git
 
 
 
-2.Edit the Following conf files
+ 2. Edit the Following conf files
 
    cd glint-service
 
@@ -68,9 +68,9 @@ git clone https://github.com/hep-gc/glint-service.git
       - replace glint-service-url with the url of your host machine (the machine you are running these scripts on)
 
 
-3.Start Download, Install and Setup
+ 3. Start Download, Install and Setup
 
-sudo python glint_setup.py install
+ sudo python glint_setup.py install
 
 
 
