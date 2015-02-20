@@ -45,9 +45,11 @@ Configure and Start the Service
 
 done ...
 
-... we can try an install
 
-Install and Setup
+
+
+
+Git Installation and Setup Method
 
 1.Get a copy of the installation scripts (this is all you need)
 
