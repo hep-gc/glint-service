@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import yaml,sys,subprocess,os
+import yaml,sys,subprocess,os,getpass
 
 glint_url = 'https://github.com/hep-gc/glint.git'
 horizon_url = 'https://github.com/rd37/horizon.git'
@@ -13,20 +13,36 @@ glint_horizon_server='django'
 cfg_dir = '/etc/glint'
 pkg_dir = 'glint-service'
 
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+dname = "%s/.."%dname
+os.chdir(dname)
+
+
 def set_env_openstack_admin_pw():
     print "---------------------------"
     print "Enter Openstack Admin Password "
-    pw = sys.stdin.readline()
+    #pw = sys.stdin.readline()
+    pw = getpass.getpass()
     env_dict={}
-    env_dict['OS_PASSWORD']=pw.rstrip()
+    #env_dict['OS_PASSWORD']=pw.rstrip()
+    env_dict['OS_PASSWORD']=pw
     os.environ.update(env_dict)
 
 def execute_command(cmd_args):
-    process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    out,err = process.communicate()
-    if err:
-        print "warning: %s"%err
-    return out,err
+    popen = subprocess.Popen(cmd_args, stdout=subprocess.PIPE,bufsize=1)
+    lines_iterator = iter(popen.stdout.readline, b"")
+    line = ""
+    while popen.poll() is None:
+        for line in lines_iterator:
+            print "-> %s"%line.rstrip()
+    #process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    #out,err = process.communicate()
+    #for line in process.stdout:
+    #    print "Sub Proc Out: %s"%line
+    #if err:
+    #    print "warning: %s"%err
+    return line,None
 
 def create_glint_user():
     print "creating glint user"
@@ -36,7 +52,7 @@ def create_glint_user():
 def download_install_glint():
     print "download install glint"
     [out,err] = execute_command(['python','%s/glint_git_setup.py'%pkg_dir,'-install','all','-glint_url','%s'%glint_url,'-glint_hor_url','%s'%horizon_url,'-glint_inst_type','%s'%gl_inst_type,'-hor_inst_type','%s'%hor_inst_type,'-glint_server','%s'%glint_server,'-glint_horizon_server','%s'%glint_horizon_server])
-    print out
+    #print out
 
 def register_glint_in_openstack():
     print "register glint in openstack"
@@ -104,6 +120,8 @@ if len(sys.argv) == 2:
         download_install_glint()
         register_glint_in_openstack()
         start_glint_service()
+        print "Checking System Status"
+        [out,err] = execute_command(['python','%s/glint_status.py'%pkg_dir])
     elif sys.argv[1] == 'clean':
         print "Full Removal of Glint and Glint Horizon"
         stop_glint_service()

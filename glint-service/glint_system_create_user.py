@@ -9,6 +9,7 @@ def execute_command(cmd_args):
     out,err = process.communicate()
     if err:
         print "warning: %s"%err
+    sys.stdout.flush()
     return out,err
 
 def create_group():

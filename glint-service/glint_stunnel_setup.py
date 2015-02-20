@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import subprocess
+import subprocess,sys
 from glint_arg_parser import GlintArgumentParser
 
 pkg_dir = "glint-service"
@@ -8,11 +8,12 @@ def execute_command(cmd_args,input):
         process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         out,err = process.communicate()
     else:
-        print "Need to use use input"
+        #print "Need to use use input"
         process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
         out,err = process.communicate(input=input)
     if err:
         print "warning: %s"%err
+    sys.stdout.flush()
     return out,err
 
 
@@ -33,7 +34,7 @@ if args.install:
     [out,err] = execute_command(['cp','%s/dev_https'%pkg_dir,'/etc/stunnel/.'],None)
     [out,err] = execute_command(['service','openstack-glint-stunnel','start'],None)
     #[out,err] = execute_command(['stunnel','dev_https','&'],None)
-    print "started stunnel with %s"%out
+    print "started stunnel "
 elif args.uninstall:
     print "Uninstall stunnel"
     [out,err] = execute_command(['service','openstack-glint-stunnel','stop'],None)

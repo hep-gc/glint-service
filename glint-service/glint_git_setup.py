@@ -27,11 +27,12 @@ def execute_command(cmd_args,input):
         process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         out,err = process.communicate()
     else:
-        print "Need to use use input"
+        #print "Need to use use input"
         process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
         out,err = process.communicate(input=input)
     if err:
         print "warning: %s"%err
+    sys.stdout.flush()
     return out,err
 
 def check_dependencies():
