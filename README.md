@@ -42,7 +42,7 @@ PIP installation Method
     Configure and Start the Service
  5. sudo python -m glint-service.glint_setup.py configure
 
-done ...
+done ... 
 
 
 
