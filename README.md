@@ -27,21 +27,21 @@ PIP installation Method
 
 Get Glint Services Configuration Scripts
 
-1.sudo pip install -i https://testpypi.python.org/pypi glint-service
+ 1. sudo pip install -i https://testpypi.python.org/pypi glint-service
 
-Change the Glint Configuration Files for your Setup
+ Change the Glint Configuration Files for your Setup
 
-2.sudo vim /etc/glint/glint_services.yaml
+ 2. sudo vim /etc/glint/glint_services.yaml
 
-3.sudo vim /etc/glint/glint_setup.yaml
+ 3. sudo vim /etc/glint/glint_setup.yaml
 
-Double check that your ports are open and accessible
+ Double check that your ports are open and accessible
 
-4.sudo vim /etc/sysconfig/iptables
+ 4. sudo vim /etc/sysconfig/iptables
 
-Configure and Start the Service
+ Configure and Start the Service
 
-5.sudo python -m glint-service.glint_setup.py configure
+ 5. sudo python -m glint-service.glint_setup.py configure
 
 done ...
 
