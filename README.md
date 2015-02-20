@@ -25,8 +25,7 @@ file and set the environment variables ... you will be prompted for the admin pa
 
 PIP installation Method
 
-Get Glint Services Configuration Scripts
-
+ Get Glint Services Configuration Scripts\n
  1. sudo pip install -i https://testpypi.python.org/pypi glint-service
 
  Change the Glint Configuration Files for your Setup
