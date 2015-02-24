@@ -23,7 +23,7 @@ Pre-req
 Make sure the file is accessible from the filesystem used to install glint, the glint setup script will read in the 
 file and set the environment variables ... you will be prompted for the admin password during the setup of glint at some point
 
-PIP installation Method (est 8 mins)
+PIP installation Method (est. 8 mins)
 
     Get Glint Services Configuration Scripts
  1. sudo pip install -i https://testpypi.python.org/pypi glint-service
