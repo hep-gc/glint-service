@@ -23,16 +23,16 @@ Pre-req
 Make sure the file is accessible from the filesystem used to install glint, the glint setup script will read in the 
 file and set the environment variables ... you will be prompted for the admin password during the setup of glint at some point
 
-PIP installation Method
+PIP installation Method (est 8 mins)
 
     Get Glint Services Configuration Scripts
  1. sudo pip install -i https://testpypi.python.org/pypi glint-service
 
 
     Change the Glint Configuration Files for your Setup
- 2. sudo vim /etc/glint/glint_services.yaml
+ 2. sudo vim /etc/glint/glint_services.yaml 
 
- 3. sudo vim /etc/glint/glint_setup.yaml
+ 3. sudo vim /etc/glint/glint_setup.yaml 
 
 
     Double check that your ports are open and accessible
@@ -40,7 +40,7 @@ PIP installation Method
 
 
     Configure and Start the Service
- 5. sudo python -m glint-service.glint_setup.py configure
+ 5. sudo python -m glint-service.glint_setup.py configure (est. 7 min)
 
 done ... 
 
