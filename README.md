@@ -23,17 +23,40 @@ Pre-req
 Make sure the file is accessible from the filesystem used to install glint, the glint setup script will read in the 
 file and set the environment variables ... you will be prompted for the admin password during the setup of glint at some point
 
-... we can try an install
+PIP installation Method (est. 8 mins)
 
-Install and Setup
-
-1.Get a copy of the installation scripts (this is all you need)
-
-git clone https://github.com/hep-gc/glint-service.git
+    Get Glint Services Configuration Scripts
+ 1. sudo pip install glint-service --pre
 
 
+    Change the Glint Configuration Files for your Setup
+ 2. sudo vim /etc/glint/glint_services.yaml 
 
-2.Edit the Following conf files
+ 3. sudo vim /etc/glint/glint_setup.yaml 
+
+
+    Double check that your ports are open and accessible
+ 4. sudo vim /etc/sysconfig/iptables
+
+
+    Configure and Start the Service
+ 5. sudo python -m glint-service.glint_setup.py configure (est. 7 min)
+
+done ... 
+
+
+
+
+
+Git Installation and Setup Method
+
+ 1. Get a copy of the installation scripts (this is all you need)
+
+ git clone https://github.com/hep-gc/glint-service.git
+
+
+
+ 2. Edit the Following conf files
 
    cd glint-service
 
@@ -44,9 +67,9 @@ git clone https://github.com/hep-gc/glint-service.git
       - replace glint-service-url with the url of your host machine (the machine you are running these scripts on)
 
 
-3.Start Download, Install and Setup
+ 3. Start Download, Install and Setup
 
-sudo python glint_setup.py install
+ sudo python glint_setup.py install
 
 
 
