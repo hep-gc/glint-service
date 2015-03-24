@@ -4,6 +4,9 @@ import sys,subprocess
 #user and group id
 id=171
 
+import glint_platform as plat
+
+
 def execute_command(cmd_args):
     process = subprocess.Popen(cmd_args,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     out,err = process.communicate()
@@ -18,7 +21,10 @@ def create_group():
 
 def add_user():
     print "Adding User %s"%id
-    [out,err] = execute_command(['adduser','-s','/sbin/nologin','-b','/var/lib','-g','%s'%id,'-u','%s'%id,'-c','OpenStack Glint Daemons','glint'])
+    if plat.isRedhat():
+        [out,err] = execute_command(['adduser','-s','/sbin/nologin','-b','/var/lib','-g','%s'%id,'-u','%s'%id,'-c','OpenStack Glint Daemons','glint'])
+    else:
+        [out,err] = execute_command(['adduser','--disabled-login','--home','/var/lib/glint','--gid','%s'%id,'--uid','%s'%id,'glint'])
 
 def remove_user():
     print "Removing User %s"%id

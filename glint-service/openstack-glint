@@ -13,8 +13,13 @@
 # Short-Description: Glance API server
 # Description: OpenStack Image Service (code-named Glance) API server
 ### END INIT INFO
-
-. /etc/rc.d/init.d/functions
+os_v=`ls /etc/. | grep redhat`
+echo ":$os_v:"
+if [$os_v = ""];then
+    . /lib/lsb/init-functions.d
+else
+    . /etc/rc.d/init.d/functions
+fi
 
 prog=python
 exec="/usr/bin/glint"
@@ -28,22 +33,27 @@ lockfile=/var/lock/subsys/$prog
 start() {
     [ -x $exec ] || exit 5
     #[ -f $config ] || exit 6
-    echo -n $"Starting $prog $exec "
-    daemon --user root --pidfile $pidfile "$exec &>/var/log/glint-service/glint.log & echo \$! > $pidfile"
+    echo -n "Starting $prog $exec "
+    if [$os_v = ""];then
+       start-stop-daemon --start --quiet --user root --pidfile $pidfile --make-pidfile --startas $exec --chuid nobody &   
+    else
+       daemon --user root --pidfile $pidfile "$exec &>/var/log/glint-service/glint.log & echo \$! > $pidfile"
+    fi
+    echo ":$pidfile::"
     retval=$?
-    echo
     [ $retval -eq 0 ] && touch $lockfile
     return $retval
 }
 
+
 stop() {
-    echo -n $"Stopping $prog: $pidfile"
+    echo -n "Stopping $prog: $pidfile"
     #killproc -p $pidfile $prog
     #retval=$?
     root_pid=`cat $pidfile`
-    #echo "root pid is $root_pid"
+    echo "root pid is $root_pid"
     pids=`pstree -p $root_pid | grep -o "[[:digit:]]*"`
-    #echo $pids
+    echo $pids
     kill $pids
     #root_pid=`cat $pidfile`
     #echo "root pid is $root_pid"
@@ -83,7 +93,7 @@ case "$1" in
         $1
         ;;
     stop)
-        rh_status_q || exit 0
+        #rh_status_q || exit 0
         $1
         ;;
     restart)

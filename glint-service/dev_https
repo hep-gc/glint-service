@@ -6,4 +6,4 @@ debug=7
 accept=8483
 connect=8080
 TIMEOUTclose=1
-
+cert=/etc/stunnel/stunnel.pem

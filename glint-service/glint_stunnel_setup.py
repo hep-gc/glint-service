@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import subprocess,sys
 from glint_arg_parser import GlintArgumentParser
+import glint_platform as plat
 
 pkg_dir = "glint-service"
 def execute_command(cmd_args,input):
@@ -23,7 +24,10 @@ args = gap.parser.parse_args()
 
 if args.install:
     print "Install stunnel"
-    [out,err] = execute_command(['yum','install','stunnel'],'y')
+    if plat.isRedhat():
+        [out,err] = execute_command(['yum','install','stunnel'],'y')
+    else:
+        [out,err] = execute_command(['apt-get','install','stunnel'],'y')
     [out,err] = execute_command(['mkdir','/etc/stunnel'],None)
     [out,err] = execute_command(['openssl','req','-new','-x509','-days','365','-nodes','-out','/etc/stunnel/stunnel.pem','-keyout','/etc/stunnel/stunnel.pem'],'CA\nBC\nVIC\nUVIC\nHEPGC\nopenstack\nglint@glint.ca\n')
     [out,err] = execute_command(['/usr/bin/openssl','gendh','2048','>>','/etc/stunnel/stunnel.pem'],None)

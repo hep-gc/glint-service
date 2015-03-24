@@ -12,6 +12,7 @@ cfg_dir = '/etc/glint'
 pkg_dir = 'glint-service'
 
 import sys,subprocess
+import glint_platform as plat
 
 from glint_arg_parser import GlintArgumentParser
 
@@ -79,22 +80,40 @@ def download_glint():
 def install_horizon():
     print "Install glint-horizon"
     print "Install library pre-reqs"
-    [out,err] = execute_command(['yum','install','libxml2-devel'],'y')
-    print out
-    [out,err] = execute_command(['yum','install','libxslt-devel'],'y')
-    print out
-    [out,err] = execute_command(['yum','install','gcc'],'y')
-    print out
-    [out,err] = execute_command(['yum','install','git-core'],'y')
-    print out
-    [out,err] = execute_command(['yum','install','python-virtualenv'],'y')
-    print out
-    [out,err] = execute_command(['yum','install','python-devel'],'y')
-    print out
-    [out,err] = execute_command(['yum','install','openssl-devel'],'y')
-    print out
-    [out,err] = execute_command(['yum','install','libffi-devel'],'y')
-    print out
+    if plat.isRedhat():
+        [out,err] = execute_command(['yum','install','libxml2-devel'],'y')
+        print out
+        [out,err] = execute_command(['yum','install','libxslt-devel'],'y')
+        print out
+        [out,err] = execute_command(['yum','install','gcc'],'y')
+        print out
+        [out,err] = execute_command(['yum','install','git-core'],'y')
+        print out
+        [out,err] = execute_command(['yum','install','python-virtualenv'],'y')
+        print out
+        [out,err] = execute_command(['yum','install','python-devel'],'y')
+        print out
+        [out,err] = execute_command(['yum','install','openssl-devel'],'y')
+        print out
+        [out,err] = execute_command(['yum','install','libffi-devel'],'y')
+        print out
+    else:
+        [out,err] = execute_command(['apt-get','install','libxml2-dev'],'y')
+        print out
+        [out,err] = execute_command(['apt-get','install','libxslt-dev'],'y')
+        print out
+        [out,err] = execute_command(['apt-get','install','gcc'],'y')
+        print out
+        [out,err] = execute_command(['apt-get','install','git-core'],'y')
+        print out
+        [out,err] = execute_command(['apt-get','install','python-virtualenv'],'y')
+        print out
+        [out,err] = execute_command(['apt-get','install','python-dev'],'y')
+        print out
+        [out,err] = execute_command(['apt-get','install','libssl-dev'],'y')
+        print out
+        [out,err] = execute_command(['apt-get','install','libffi-dev'],'y')
+        print out
     if horizon_inst_type == 'default':
         print "Install Horizon using default (virtualenv in /var/lib/glint/horizon/.venv)"
         [out,err] = execute_command(['python','/var/lib/glint/horizon/tools/install_venv.py'],None)

@@ -14,7 +14,14 @@
 # Description: OpenStack Image Service (code-named Glance) API server
 ### END INIT INFO
 
-. /etc/rc.d/init.d/functions
+#. /etc/rc.d/init.d/functions
+os_v=`ls /etc/. | grep redhat`
+echo ":$os_v:"
+if [$os_v = ""];then
+    . /lib/lsb/init-functions.d
+else
+    . /etc/rc.d/init.d/functions
+fi
 
 prog=stunnel
 exec="/usr/bin/stunnel"
@@ -26,10 +33,14 @@ pidfile="/var/run/stunnel/glint.pid"
 lockfile=/var/lock/subsys/$prog
 
 start() {
-    [ -x $exec ] || exit 5
+    #[ -x $exec ] || exit 5
     #[ -f $config ] || exit 6
-    echo -n $"Starting $prog $exec "
-    daemon --user root --pidfile $pidfile "$exec $config &>/dev/null & echo \$! > $pidfile"
+    echo -n "Starting $prog $exec "
+    if [$os_v = ""];then
+       start-stop-daemon --start --quiet --user root --pidfile $pidfile --make-pidfile --startas /usr/bin/stunnel4 $config  &
+    else
+       daemon --user root --pidfile $pidfile "$exec $config &>/dev/null & echo \$! > $pidfile"
+    fi
     retval=$?
     echo
     [ $retval -eq 0 ] && touch $lockfile
@@ -37,7 +48,7 @@ start() {
 }
 
 stop() {
-    echo -n $"Stopping $prog: $pidfile"
+    echo -n "Stopping $prog: $pidfile"
     killproc -p $pidfile $prog
     retval=$?
     #root_pid=`cat $pidfile`
@@ -79,11 +90,11 @@ rh_status_q() {
 
 case "$1" in
     start)
-        rh_status_q && exit 0
+        #rh_status_q && exit 0
         $1
         ;;
     stop)
-        rh_status_q || exit 0
+        #rh_status_q || exit 0
         $1
         ;;
     restart)
