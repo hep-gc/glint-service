@@ -19,4 +19,4 @@ glint-user-id: 172
 
 glint-service-url: 'http://localhost'
 glint-service-port: '9494'
-
+glint-service-region: 'openstack'

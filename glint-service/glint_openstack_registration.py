@@ -22,6 +22,7 @@ env_dict={}
 
 glint_service_url='http://rat01.heprc.uvic.ca'
 glint_service_port='9494'
+glint_service_region='openstack'
 
 cfg_dir = '/etc/glint'
 
@@ -58,7 +59,7 @@ def setup_glint_service():
     rexp_processor = re.compile('[a-z0-9]{32}')
     glint_service_id = rexp_processor.search(rexp_res.group()).group()
     
-    out,err = execute_command(['keystone','endpoint-create','--region=openstack','--service-id=%s'%glint_service_id,'--publicurl=%s:%s/image_dist/'%(glint_service_url,glint_service_port),'--internalurl=http://127.0.0.1:%s/'%glint_service_port,'--adminurl=%s:%s/admin'%(glint_service_url,glint_service_port)])
+    out,err = execute_command(['keystone','endpoint-create','--region=%s'%glint_service_region,'--service-id=%s'%glint_service_id,'--publicurl=%s:%s/image_dist/'%(glint_service_url,glint_service_port),'--internalurl=http://127.0.0.1:%s/'%glint_service_port,'--adminurl=%s:%s/admin'%(glint_service_url,glint_service_port)])
     print "Success Registering Glint to Openstack's Keystone database"
     return
 
@@ -124,6 +125,7 @@ if not env_ck:
 cfg_f = yaml.load( open("%s/glint_setup.yaml"%cfg_dir,'r') )
 glint_service_url=cfg_f['glint-service-url']
 glint_service_port=cfg_f['glint-service-port']
+glint_service_region=cfg_f['glint-service-region']
 
 if env_ck:
     if len(sys.argv) == 2:
