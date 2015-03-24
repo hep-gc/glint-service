@@ -28,20 +28,20 @@ pidfile="/var/run/glint/glint.pid"
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
-lockfile=/var/lock/subsys/$prog
+#lockfile=/var/lock/subsys/$prog
 
 start() {
     [ -x $exec ] || exit 5
     #[ -f $config ] || exit 6
     echo -n "Starting $prog $exec "
     if [$os_v = ""];then
-       start-stop-daemon --start --quiet --user root --pidfile $pidfile --make-pidfile --startas $exec --chuid nobody &   
+       start-stop-daemon --start --quiet -b --user root --pidfile $pidfile --make-pidfile --exec $exec > /dev/null || return 1 
     else
        daemon --user root --pidfile $pidfile "$exec &>/var/log/glint-service/glint.log & echo \$! > $pidfile"
     fi
     echo ":$pidfile::"
     retval=$?
-    [ $retval -eq 0 ] && touch $lockfile
+    #[ $retval -eq 0 ] && touch $lockfile
     return $retval
 }
 

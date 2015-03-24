@@ -30,20 +30,20 @@ pidfile="/var/run/stunnel/glint.pid"
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
-lockfile=/var/lock/subsys/$prog
+#lockfile=/var/lock/subsys/$prog
 
 start() {
     #[ -x $exec ] || exit 5
     #[ -f $config ] || exit 6
     echo -n "Starting $prog $exec "
     if [$os_v = ""];then
-       start-stop-daemon --start --quiet --user root --pidfile $pidfile --make-pidfile --startas /usr/bin/stunnel4 $config  &
+       start-stop-daemon --start --quiet -b  --user root --pidfile $pidfile --make-pidfile --exec /usr/bin/stunnel4 $config > /dev/null || return 1
     else
        daemon --user root --pidfile $pidfile "$exec $config &>/dev/null & echo \$! > $pidfile"
     fi
     retval=$?
-    echo
-    [ $retval -eq 0 ] && touch $lockfile
+    #echo
+    #[ $retval -eq 0 ] && touch $lockfile
     return $retval
 }
 
